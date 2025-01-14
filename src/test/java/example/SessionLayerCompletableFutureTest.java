@@ -1,4 +1,3 @@
-
 /**
  *  Copyright Murex S.A.S., 2003-2025. All Rights Reserved.
  *
@@ -8,6 +7,7 @@
 package example;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
@@ -18,7 +18,7 @@ public class SessionLayerCompletableFutureTest {
     @Test
     public void completable_future_solution() {
 
-        var service = new SessionLayer();
+        var service = new SessionLayer(Executors.newFixedThreadPool(1));
         var client = new SynchronizedClient();
         client.subscribe(service);
 
