@@ -1,5 +1,7 @@
 package example;
 
+import java.util.concurrent.Executors;
+
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.timeout;
@@ -12,7 +14,7 @@ import org.mockito.stubbing.Answer;
 public class SessionLayerMockitoTest {
     @Test
     void mockito_solution() {
-        Service service = new SessionLayer();
+        Service service = new SessionLayer(Executors.newFixedThreadPool(10));
         Client client = Mockito.mock(Client.class);
         service.subscribe(client);
 

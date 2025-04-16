@@ -6,6 +6,8 @@
  */
 package example;
 
+import java.util.concurrent.Executors;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 
@@ -14,7 +16,7 @@ class SessionLayerBasicTest {
 
     @Test
     public void the_basic_test() {
-        Service service = new SessionLayer();
+        Service service = new SessionLayer(Runnable::run);
         MyTestClient client = new MyTestClient();
         client.subscribe(service);
 
@@ -25,7 +27,7 @@ class SessionLayerBasicTest {
 
     @Test
     public void thread_sleep_solution() throws InterruptedException {
-        Service service = new SessionLayer();
+        Service service = new SessionLayer(Executors.newFixedThreadPool(10));
         MyTestClient client = new MyTestClient();
         client.subscribe(service);
 

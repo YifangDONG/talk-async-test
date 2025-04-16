@@ -1,6 +1,7 @@
 package example;
 
 import static java.util.concurrent.TimeUnit.MINUTES;
+import java.util.concurrent.Executors;
 
 import static org.awaitility.Awaitility.await;
 import org.junit.jupiter.api.Test;
@@ -9,7 +10,7 @@ import org.junit.jupiter.api.Test;
 public class SessionLayerAwaitilityTest {
     @Test
     public void the_basic_test_with_awaitility() {
-        Service service = new SessionLayer();
+        Service service = new SessionLayer(Executors.newFixedThreadPool(10));
         MyTestClient client = new MyTestClient();
         client.subscribe(service);
 

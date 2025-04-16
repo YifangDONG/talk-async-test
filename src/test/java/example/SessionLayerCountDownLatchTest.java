@@ -1,6 +1,7 @@
 package example;
 
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Executors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
@@ -10,7 +11,7 @@ public class SessionLayerCountDownLatchTest {
 
     @Test
     public void count_down_latch_solution() throws InterruptedException {
-        Service service = new SessionLayer();
+        Service service = new SessionLayer(Executors.newFixedThreadPool(10));
         SynchronizedClient client = new SynchronizedClient();
         client.subscribe(service);
 

@@ -3,15 +3,14 @@ package example;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 
 
 public class SessionLayer implements Service {
     private final Executor executor;
     private final List<Client> clients = new ArrayList<>();
 
-    public SessionLayer() {
-        this.executor = Executors.newFixedThreadPool(10);
+    public SessionLayer(Executor executor) {
+        this.executor = executor;
     }
 
     @Override
