@@ -1,14 +1,6 @@
-
-/**
- *  Copyright Murex S.A.S., 2003-2025. All Rights Reserved.
- *
- *  This software program is proprietary and confidential to Murex S.A.S and its affiliates ("Murex") and, without limiting the generality of the foregoing reservation of rights, shall not be accessed, used, reproduced or distributed without the
- *  express prior written consent of Murex and subject to the applicable Murex licensing terms. Any modification or removal of this copyright notice is expressly prohibited.
- */
 package example;
 
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
@@ -19,7 +11,7 @@ public class SessionLayerCompletableFutureTest {
     @Test
     public void completable_future_solution() {
 
-        var service = new SessionLayer(Executors.newFixedThreadPool(1));
+        var service = new SessionLayer();
         var client = new SynchronizedClient();
         client.subscribe(service);
 

@@ -34,7 +34,7 @@ public class CompletableFutureExampleTest {
         });
         System.out.println("execute other task in main thread");
         var start = System.nanoTime();
-        future.join();
+        future.join(); // Wait for the task to complete
         var elapsed = System.nanoTime() - start;
         System.out.printf("Finished executing after after %d ms\n", elapsed / 1000000);
     }

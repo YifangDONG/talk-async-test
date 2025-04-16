@@ -1,31 +1,34 @@
 package example;
 
-import java.util.concurrent.CountDownLatch;
+import static java.util.concurrent.TimeUnit.MINUTES;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.awaitility.Awaitility.await;
 import org.junit.jupiter.api.Test;
 
 
-public class SessionLayerCountDownLatchTest {
-
+public class SessionLayerAwaitilityTest {
     @Test
-    public void count_down_latch_solution() throws InterruptedException {
+    public void the_basic_test_with_awaitility() {
         Service service = new SessionLayer();
-        SynchronizedClient client = new SynchronizedClient();
+        MyTestClient client = new MyTestClient();
         client.subscribe(service);
 
         client.sendRequest("Calculate");
 
-        assertEquals("Finished to execute command Calculate", client.getLastNotification());
+        await()
+            .atMost(1, MINUTES)
+            //            .pollInterval(Durations.ONE_HUNDRED_MILLISECONDS) // default value = ONE_HUNDRED_MILLISECONDS
+            .until(() ->
+                "Finished to execute command Calculate".equals(client.getLastNotification())
+            );
     }
 
-    static class SynchronizedClient implements Client {
+    static class MyTestClient implements Client {
 
         private Service service;
-        private CountDownLatch countDownLatch;
         private String lastNotification;
 
-        public SynchronizedClient() {
+        public MyTestClient() {
         }
 
         @Override
@@ -37,17 +40,14 @@ public class SessionLayerCountDownLatchTest {
         @Override
         public void onNotify(String aggregates) {
             lastNotification = aggregates;
-            countDownLatch.countDown();
         }
 
         @Override
         public void sendRequest(String command) {
-            countDownLatch = new CountDownLatch(1);
             service.executeCommand(command);
         }
 
-        public String getLastNotification() throws InterruptedException {
-            countDownLatch.await();
+        public String getLastNotification() {
             return lastNotification;
         }
     }

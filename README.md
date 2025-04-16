@@ -75,25 +75,34 @@ classDiagram
 
 ## Concept
 
-### How future works
+### How the Future works
+
+https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/Future.html
+
+The Future interface in Java represents a value that will be available at some point in the future.
+It's commonly used for handling asynchronous tasks.
+The two important methods of the Future interface:
+
+- isDone(): This method checks if the computation is complete. It returns true if the task is finished, otherwise false.
+- get(): This method retrieves the result of the computation once it's complete. If the computation isn't finished yet,
+  this method blocks until the result is available.
 
 ```mermaid
 sequenceDiagram
     participant Main Thread
-    participant ExecutorService
-    participant Task
-    Main Thread ->> ExecutorService: submit(Callable)
-    ExecutorService ->> Task: Execute Callable
-    Note right of Task: Long-running computation
-    Task -->> ExecutorService: Result
-    ExecutorService -->> Main Thread: Future
-    Main Thread ->> Future: get()
-    Future -->> Main Thread: Result
+    participant Executor
+    Main Thread ->>+ Executor: submit(Callable)
+    Executor ->>- Main Thread: Future
+    Main Thread ->>+ Future: get()
+    Note right of Executor: Long-running computation
+    Future ->>- Main Thread: Result
 ```
 
-### How CompletableFuture works:
+### How the CompletableFuture works:
 
-CompletableFuture allow us to chain operations
+https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html
+
+CompletableFuture allow us to complete the future manually. We can also chain operations
 
 ```mermaid
 sequenceDiagram
@@ -109,7 +118,9 @@ sequenceDiagram
     CompletableFuture -->> Client: provide result2
 ```
 
-### How CountDownLatch Works:
+### How the CountDownLatch Works:
+
+https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CountDownLatch.html
 
 The concept of a CountDownLatch is very straightforward. Imagine it as a door that's closed initially and can be opened.
 When the door is open, all threads can pass through without restriction. However, when it’s closed, all threads must
@@ -145,4 +156,36 @@ sequenceDiagram
     Note over Main thread: Latch count = 0
     Note over Main thread: Main thread is unblocked
 ```
+
+## Third-party libraries
+
+### Mockito
+
+https://site.mockito.org/
+
+Mockito timeout is used to wait for the mock to be invoked in another thread.
+
+```code
+verify(myMock, timeout(100)).performAction();
+```
+
+### Awaitility
+
+https://github.com/awaitility/awaitility
+
+```code
+await()
+.atMost(2,SECONDS) // Maximum wait time
+.pollInterval(100,MILLISECONDS) // Polling interval
+.until(() ->someCondition()); // Condition to evaluate
+```
+
+- Start Time: Awaitility records the current time when the await() call starts.
+- Polling Loop: It enters a loop where it evaluates the condition at regular intervals (default or custom polling
+  interval).
+- Elapsed Time Check: After each condition evaluation, Awaitility calculates the elapsed time by comparing the current
+  time with the recorded start time.
+- Timeout Handling: If the elapsed time exceeds the specified timeout, Awaitility stops polling and throws a
+  ConditionTimeoutException.
+
 
